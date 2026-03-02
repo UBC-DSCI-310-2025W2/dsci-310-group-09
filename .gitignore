@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+.DS_store
+.env
+env/
+data/*.csv
+.tmp
