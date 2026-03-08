@@ -16,16 +16,10 @@ Activate the new environment:
 
 `conda activate online-shoppers`
 
-### Dockerfile
+### Docker image
 
-First build a docker image:
+This project uses Docker to provide a reproducible computation environment. The Docker image is defined in the root-level `Dockerfile` and is automatically built and pushed to Docker Hub through GitHub Actions whenever the `Dockerfile` or dependency files are updated on `main`.
 
-`docker build -t online-shoppers .`
+To pull the published image:
 
-Second, run the docker container:
-
-`docker run --rm -p 8888:8888 online-shoppers`
-
-Finally, open browser and go to http://localhost:8888
-
-The jupyter environment inside localhost8888 contain all dependencies needed to run the notebook.
+`docker pull yourdockerhubusername/dsci-310-group-09:latest`
