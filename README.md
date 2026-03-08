@@ -1,25 +1,47 @@
-# dsci-310-group-09 Online Shoppers Purchase Behavior Classification Project
+# dsci-310-group-09 — Online Shoppers Purchase Behavior Classification
 
-## **To install the same env using conda-lock or docker**
+This project builds classification models to predict whether an online shopping session results in a purchase, using the *Online Shoppers Purchasing Intention* dataset. We provide two fully reproducible ways to run the analysis: **conda-lock** (local environment) or **Docker** (containerized environment).
 
-### conda-lock
+## Reproducibility and Dependencies
 
-If you haven't used conda-lock before, you need to install it first:
+- **Conda environment (locked):** `conda-lock.yml`  
+- **Container definition:** `Dockerfile`  
+- **Automated image publishing:** GitHub Actions builds and pushes the Docker image to Docker Hub when the `Dockerfile` or dependency files are updated on `main`.
 
-`conda install -c conda-forge conda-lock`
+---
 
-Then create the environment using the conda-lock.yml file:
+## Option A: Run with conda-lock (recommended for local development)
 
-`conda-lock install -n online-shoppers conda-lock.yml`
+Install conda-lock, create environment and activate jupyter. Run the code below one line at a time.
 
-Activate the new environment:
+```bash
+conda install -c conda-forge conda-lock
+conda-lock install -n online-shoppers conda-lock.yml
+conda activate online-shoppers
+jupyter lab
+```
 
-`conda activate online-shoppers`
+Open and run `310-group9_online-shoppers-classification.ipynb` for full report.
 
-### Docker image
+## Option B: Run using Docker
 
-This project uses Docker to provide a reproducible computation environment. The Docker image is defined in the root-level `Dockerfile` and is automatically built and pushed to Docker Hub through GitHub Actions whenever the `Dockerfile` or dependency files are updated on `main`.
+The Docker image is defined in the root-level Dockerfile and is automatically built and pushed to Docker Hub through GitHub Actions whenever the Dockerfile or dependency files are updated on main.
 
-To pull the published image:
+Pull the published image, run jupyter inside container:
 
-`docker pull yourdockerhubusername/dsci-310-group-09:latest`
+```bash
+docker pull cjz115/dsci-310-group-09:latest
+```
+
+Run container and start jupyter lab,
+
+```bash
+docker run --rm -it \
+  -p 8888:8888 \
+  -v "$PWD":/home/jovyan/work \
+  -w /home/jovyan/work \
+  cjz115/dsci-310-group-09:latest \
+  jupyter lab --ip=0.0.0.0 --no-browser
+  ```
+
+Copy the URL appearing in your terminal after running the above command, or go to `localhost:8888`, and paste the token shown in the terminal to access jupyter lab. Open and run `310-group9_online-shoppers-classification.ipynb` for full report.
