@@ -41,7 +41,7 @@ docker run --rm -it \
   -v "$PWD":/home/jovyan/work \
   -w /home/jovyan/work \
   cjz115/dsci-310-group-09:latest \
-  jupyter lab --ip=0.0.0.0 --no-browser
+  jupyter lab --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password=''
   ```
 
 Copy the URL appearing in your terminal after running the above command, or go to `localhost:8888`, and paste the token shown in the terminal to access jupyter lab. Open and run `310-group9_online-shoppers-classification.ipynb` for full report.
