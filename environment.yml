@@ -1,0 +1,23 @@
+name: online-shoppers
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+
+  # core data + viz
+  - numpy
+  - pandas
+  - matplotlib
+
+  # ML
+  - scikit-learn
+
+  # notebook tooling (helps with reproducibility)
+  - jupyter
+  - jupyterlab
+  - ipykernel
+
+  # SHAP often easiest via pip
+  - pip:
+      - shap
