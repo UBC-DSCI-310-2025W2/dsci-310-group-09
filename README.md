@@ -44,4 +44,4 @@ docker run --rm -it \
   jupyter lab --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password=''
   ```
 
-Copy the URL appearing in your terminal after running the above command, or go to `localhost:8888`, and paste the token shown in the terminal to access jupyter lab. Open and run `310-group9_online-shoppers-classification.ipynb` for the full report.
+Go to `localhost:8888` to access jupyter lab, and open `310-group9_online-shoppers-classification.ipynb` for the full report.
