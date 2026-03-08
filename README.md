@@ -1,4 +1,4 @@
-# dsci-310-group-09
+# dsci-310-group-09 Online Shoppers Purchase Behavior Classification Project
 
 ## **To install the same env using conda-lock or docker**
 
