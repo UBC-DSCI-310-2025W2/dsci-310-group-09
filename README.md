@@ -10,7 +10,7 @@ This project builds classification models to predict whether an online shopping 
 
 ---
 
-## Option A: Run with conda-lock (recommended for local development)
+### Option A: Run with conda-lock (recommended for local development)
 
 Install conda-lock, create environment and activate jupyter. Run the code below one line at a time.
 
@@ -23,7 +23,7 @@ jupyter lab
 
 Open and run `310-group9_online-shoppers-classification.ipynb` for full report.
 
-## Option B: Run using Docker
+### Option B: Run using Docker
 
 The Docker image is defined in the root-level Dockerfile and is automatically built and pushed to Docker Hub through GitHub Actions whenever the Dockerfile or dependency files are updated on main.
 
