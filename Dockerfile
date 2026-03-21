@@ -7,7 +7,7 @@ WORKDIR /home/jovyan/work
 COPY --chown=${NB_UID}:${NB_GID} . /home/jovyan/work
 
 # Install extra packages not already in the base image
-RUN pip install --no-cache-dir shap
+RUN pip install --no-cache-dir shap==0.49.1
 
 EXPOSE 8888
 
