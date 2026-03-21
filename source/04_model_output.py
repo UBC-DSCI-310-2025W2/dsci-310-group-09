@@ -77,13 +77,15 @@ def main(input_path, output_prefix):
     else:
         shap_values_class1 = shap_values[:, :, 1]
 
+    plt.figure(figsize=(14, 9))
     shap.summary_plot(
         shap_values_class1,
         X_test,
-        max_display=10,
-        plot_size=(12, 8),
+        max_display=12,
+        plot_size=(14, 9),
         show=False
     )
+    plt.title("SHAP Summary Plot for Online Shopper Revenue Prediction", pad=15)
     plt.tight_layout()
     plt.savefig(f"{output_prefix}_shap_summary.png", dpi=300, bbox_inches="tight")
     plt.close()
