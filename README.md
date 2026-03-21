@@ -21,7 +21,7 @@ conda activate online-shoppers
 jupyter lab
 ```
 
-Open and run `310-group9_online-shoppers-classification.ipynb` for full report.
+Open and run `notebooks/310-group9_online-shoppers-classification.ipynb` for full report.
 
 ### Option B: Run using Docker
 
@@ -44,4 +44,4 @@ docker run --rm -it \
   jupyter lab --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password=''
   ```
 
-Go to `localhost:8888` to access jupyter lab, and open `310-group9_online-shoppers-classification.ipynb` for the full report.
+Go to `localhost:8888` to access jupyter lab, and open `notebooks/310-group9_online-shoppers-classification.ipynb` for the full report.
