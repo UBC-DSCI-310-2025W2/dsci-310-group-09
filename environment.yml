@@ -3,21 +3,21 @@ channels:
   - conda-forge
 dependencies:
   - python=3.10
-  - pip
+  - pip = 26.0.1
 
   # core data + viz
-  - numpy
-  - pandas
-  - matplotlib
+  - numpy = 2.2.6
+  - pandas = 2.3.3
 
   # ML
-  - scikit-learn
-
+  - scikit-learn = 1.7.2
+  - matplotlib = 3.10.8
+  - click = 8.3.1
   # notebook tooling (helps with reproducibility)
-  - jupyter
-  - jupyterlab
-  - ipykernel
+  - jupyter = 1.1.1
+  - jupyterlab = 4.5.6
+  - ipykernel = 7.2.0
 
   # SHAP often easiest via pip
   - pip:
-      - shap
+      - shap == 0.49.1
