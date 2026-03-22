@@ -171,7 +171,7 @@ Feature importance and SHAP summary plots are used to better understand the infl
 Table&nbsp;1: Online Shoppers Dataset
 </figcaption>
 <div aria-describedby="tbl-dataset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="26">
+<div class="cell-output cell-output-display" data-execution_count="11">
 <div>
 
 
@@ -322,7 +322,7 @@ Table&nbsp;1: Online Shoppers Dataset
 Table&nbsp;2: Data Column Names, Value Counts, and Data Types
 </figcaption>
 <div aria-describedby="tbl-df-info-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="27">
+<div class="cell-output cell-output-display" data-execution_count="12">
 <div>
 
 
@@ -454,14 +454,14 @@ Table&nbsp;2: Data Column Names, Value Counts, and Data Types
 </div>
 </div>
 <p>As shown in <a href="#tbl-df-info" class="quarto-xref">Table&nbsp;2</a>, the dataset contains 18 features with a mix of numerical and categorical types, and no missing values are present.</p>
-<div class="cell" data-execution_count="7">
-<div id="tbl-class-balance" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="7">
+<div class="cell" data-execution_count="6">
+<div id="tbl-class-balance" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="6">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-class-balance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;3: Class Balance for Target Variable Revenue
 </figcaption>
 <div aria-describedby="tbl-class-balance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -497,19 +497,15 @@ Table&nbsp;3: Class Balance for Target Variable Revenue
 </section>
 <section id="eda-figures" class="level2">
 <h2 class="anchored" data-anchor-id="eda-figures">EDA Figures</h2>
-<div id="cell-fig-value-and-counts" class="cell" data-fig-height="18" data-fig-width="20" data-execution_count="8">
-<div class="cell-output cell-output-display">
-<div id="fig-value-and-counts" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-value-and-counts" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Histograms showing the distributions of key online shopper features.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-value-and-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="online-shoppers-classification_files/figure-html/fig-value-and-counts-output-1.png" width="966" height="801" class="figure-img">
+<img src="../results/online_shoppers_eda_histograms.png" class="img-fluid figure-img" style="width:100.0%" alt="Histograms showing the distributions of key online shopper features.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-value-and-counts-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Histogram for All Feature Values and Counts
+Figure&nbsp;1: Histogram for all feature values and counts.
 </figcaption>
 </figure>
-</div>
-</div>
 </div>
 <p>As shown in <a href="#fig-value-and-counts" class="quarto-xref">Figure&nbsp;1</a> show that most numerical variables (e.g., <code>Administrative</code>, <code>Informational</code>, <code>ProductRelated</code>) are highly right-skewed, with a large number of sessions having low values. This suggests that most users interact minimally with the website, and only a minority exhibit intensive browsing behavior. We will consider log transformations (or use tree-based classifiers) so that a few extreme browsing sessions do not dominate the learning signal when predicting Revenue.</p>
 <p>We spot that many features are ‘zero-heavy’, thus we need a model that is robust to the zero-inflation.</p>
@@ -517,14 +513,14 @@ Figure&nbsp;1: Histogram for All Feature Values and Counts
 </section>
 <section id="model-evaluation-random-forest-classifier-performance" class="level2">
 <h2 class="anchored" data-anchor-id="model-evaluation-random-forest-classifier-performance">Model Evaluation: Random Forest Classifier Performance</h2>
-<div class="cell" data-execution_count="9">
-<div id="tbl-f1-metrics-and-auc" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-execution_count="9">
+<div class="cell" data-message="false" data-execution_count="7">
+<div id="tbl-f1-metrics-and-auc" class="cell quarto-float quarto-figure quarto-figure-center anchored" data-message="false" data-execution_count="7">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-f1-metrics-and-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4: F1 Metrics and AUC
+Table&nbsp;4: Classification metrics and AUC
 </figcaption>
 <div aria-describedby="tbl-f1-metrics-and-auc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display" data-execution_count="14">
 <div>
 
 
@@ -588,23 +584,19 @@ Table&nbsp;4: F1 Metrics and AUC
 <p>Accuracy is 0.89, but it is inflated due to class imbalance discovered in EDA. We need to analyze the results on a class-by-class bases.</p>
 <p>For class 0, precision, recall, and f1 score are all above 0.9, suggesting the model performs well in predicting non-purchase scenarios.</p>
 <p>For class 1, the metrics are much lower. A recall of 0.51 means only 51% of actual buyers are correctly classified, which could be due to lack of actual buyer data in the dataset. The f1 score of 0.6 is moderate, but not strong.</p>
-<p>To sum up, a ROC-AUC of 0.92 means the model has high discriminative ability and can separate buyers and non-buyers well, but suffers from low recall for the buyer class.</p>
+<p>We also obtained an ROC-AUC of 0.916, meaning the model has high discriminative ability and can separate buyers and non-buyers well, but suffers from low recall for the buyer class.</p>
 </section>
 <section id="feature-importance-plot" class="level2">
 <h2 class="anchored" data-anchor-id="feature-importance-plot">Feature Importance Plot</h2>
-<div id="cell-fig-top-10-features" class="cell" data-fig-height="12" data-fig-width="10" data-execution_count="10">
-<div class="cell-output cell-output-display">
-<div id="fig-top-10-features" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-top-10-features" class="quarto-float quarto-figure quarto-figure-center anchored" alt="Bar chart of the ten most important random forest features for predicting purchase revenue.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-top-10-features-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="online-shoppers-classification_files/figure-html/fig-top-10-features-output-1.png" width="715" height="429" class="figure-img">
+<img src="../results/online_shoppers_model_feature_importance.png" class="img-fluid figure-img" style="width:100.0%" alt="Bar chart of the ten most important random forest features for predicting purchase revenue.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-top-10-features-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Top 10 Important Features for Predicting Revenue
+Figure&nbsp;2: Top 10 important features for predicting revenue.
 </figcaption>
 </figure>
-</div>
-</div>
 </div>
 <p><a href="#fig-top-10-features" class="quarto-xref">Figure&nbsp;2</a> ranks variables based on how much they contribute to model decisions.</p>
 <ol type="1">
@@ -618,36 +610,27 @@ Figure&nbsp;2: Top 10 Important Features for Predicting Revenue
 </section>
 <section id="shap-summary-plot" class="level2">
 <h2 class="anchored" data-anchor-id="shap-summary-plot">SHAP Summary Plot</h2>
-<div id="cell-fig-shap-plot" class="cell" data-fig-height="16" data-fig-width="18" data-execution_count="11">
-<div class="cell-output cell-output-display">
-<div id="fig-shap-plot" class="quarto-float quarto-figure quarto-figure-center anchored">
+<div id="fig-shap-plot" class="quarto-float quarto-figure quarto-figure-center anchored" alt="SHAP summary plot showing how feature values influence the model’s purchase predictions.">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-shap-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="online-shoppers-classification_files/figure-html/fig-shap-plot-output-1.png" width="1242" height="854" class="figure-img">
+<img src="../results/online_shoppers_model_shap_summary.png" class="img-fluid figure-img" style="width:100.0%" alt="SHAP summary plot showing how feature values influence the model’s purchase predictions.">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shap-plot-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: SHAP Summary Plot for Purchase Prediction (Random Forest)
+Figure&nbsp;3: SHAP summary plot for purchase prediction from the random forest model.
 </figcaption>
 </figure>
 </div>
-</div>
-</div>
+<p>The SHAP summary plot shows which features most strongly influence the model’s prediction of purchase behaviour. Features are ordered by importance, with each point representing one observation; the x-axis shows whether the feature pushes the prediction toward lower or higher purchase likelihood (positive, more likely), and the colour indicates whether the feature value is low or high.</p>
 <p><a href="#fig-shap-plot" class="quarto-xref">Figure&nbsp;3</a> above shows how feature values influence predictions:<br>
 </p>
-<ol type="1">
-<li><p>High <code>PageValues</code> strongly push predictions towards purchase, and it indicates that users viewing high-value pages are very likely to convert<br>
-</p></li>
-<li><p>High <code>ExitRates</code> relate to negative SHAP values, indicating that when users frequently exit pages, the model predicts lower purchase probability.<br>
-</p></li>
-<li><p>There is a seasonality effect for <code>Month_Nov</code>, where the month of November tends to push predictions towards purchase. This is likely due to Black Friday or holiday shopping behaviour, making customers more likely to purchase.<br>
-</p></li>
-<li><p>High <code>BouceRates</code> push predictions towards no purchase, indicating that users who leave quickly are unlikely to buy.<br>
-</p></li>
-<li><p><code>ProductRelated_Duration</code> shows that a longer time spend on product pages indicates a higher likelihood of purchasing.<br>
-</p></li>
-<li><p><code>VisitorType_Returning_Visitor</code> shows that returning visitors are more likely to purchase and are more likely to convert than new visitors.<br>
-</p></li>
-</ol>
+<ul>
+<li><p>High <code>PageValues</code> strongly push predictions towards purchase, and it indicates that users viewing high-value pages are very likely to convert.</p></li>
+<li><p>High <code>ExitRates</code> relate to negative SHAP values, indicating that when users frequently exit pages, the model predicts lower purchase probability.</p></li>
+<li><p>There is a seasonality effect for <code>Month_Nov</code>, where the month of November tends to push predictions towards purchase. This is likely due to Black Friday or holiday shopping behaviour, making customers more likely to purchase.</p></li>
+<li><p>High <code>BouceRates</code> push predictions towards no purchase, indicating that users who leave quickly are less likely to buy.</p></li>
+<li><p><code>ProductRelated_Duration</code> appears to have some influence on predictions, but its effect is less clear and less consistently directional than top features such as PageValues and ExitRates</p></li>
+<li><p><code>VisitorType_Returning_Visitor</code> shows that returning visitors are more likely to purchase than new visitors.</p></li>
+</ul>
 <p>From the results, we can see that engagement is the strongest predicture where features related to time spend and pages viewed dominate the model and are highly related to whether a customer purchases or not.</p>
 </section>
 </section>
@@ -655,7 +638,7 @@ Figure&nbsp;3: SHAP Summary Plot for Purchase Prediction (Random Forest)
 <h1>Discussion</h1>
 <section id="model-performance" class="level2">
 <h2 class="anchored" data-anchor-id="model-performance">Model Performance</h2>
-<p>Overall, we found that browsing behaviour can be used to predict whether an online shopper will complete a purchase with reasonably strong performance. Our Random Forest classifier achieved an overall accuracy of 0.89 and a ROC-AUC of 0.92, which suggests that the model was good at distinguishing between purchasing and non-purchasing sessions. However, because the data was imbalanced, the more important result was the class-specific performance. The model performed very well at identifying non-purchasing sessions, but it was less effective at identifying actual buyers, with a recall of 0.51 and an F1 score of 0.6 for the purchase class. We also found that engagement-related features were the most important predictors of shopping behaviour. In particular, <code>PageValues</code>, <code>ExitRates</code>, <code>ProductRelated_Duration</code>, <code>ProductRelated</code>, and <code>BounceRates</code> had the strongest influence on the model’s predictions. The SHAP analysis also suggested that longer time spent on product-related pages, being a returning visitor, and shopping in November were associated with a higher likelihood of purchase.</p>
+<p>Overall, we found that browsing behaviour can be used to predict whether an online shopper will complete a purchase with reasonably strong performance. Our Random Forest classifier achieved an overall accuracy of 0.89 and a ROC-AUC of 0.916, which suggests that the model was good at distinguishing between purchasing and non-purchasing sessions. However, because the data was imbalanced, the more important result was the class-specific performance. The model performed very well at identifying non-purchasing sessions, but it was less effective at identifying actual buyers, with a recall of 0.51 and an F1 score of 0.6 for the purchase class. We also found that engagement-related features were the most important predictors of shopping behaviour. In particular, <code>PageValues</code>, <code>ExitRates</code>, <code>ProductRelated_Duration</code>, <code>ProductRelated</code>, and <code>BounceRates</code> had the strongest influence on the model’s predictions. The SHAP analysis also suggested that longer time spent on product-related pages, being a returning visitor, and shopping in November were associated with a higher likelihood of purchase.</p>
 </section>
 <section id="feature-importance-insights" class="level2">
 <h2 class="anchored" data-anchor-id="feature-importance-insights">Feature Importance Insights</h2>

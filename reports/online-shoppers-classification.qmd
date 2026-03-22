@@ -16,7 +16,7 @@ import pandas as pd
 
 url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00468/online_shoppers_intention.csv"
 df = pd.read_csv(url)
-df.to_csv("../data/data.csv", index=False)
+df.to_csv("../data/raw_online_shoppers.csv", index=False)
 ```
 
 ```{python, message=FALSE, warning=FALSE}
@@ -27,42 +27,30 @@ online['Weekend'] = online['Weekend'].astype(int)
 online['Revenue'] = online['Revenue'].astype(int)
 # One-hot Encoding on categorical variables
 online = pd.get_dummies(online, columns=['Month', 'VisitorType'], drop_first=True)
-#Check for class balance
 ```
 
-```{python, message=FALSE, warning=FALSE}
-from sklearn.model_selection import train_test_split
-# Train-test split
-X = online.drop("Revenue", axis=1)
-y = online["Revenue"]
 
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42, stratify=y
+```{python, messages=FALSE, warning=FALSE}
+#| echo: false
+#| warning: false
+#| message: false
+
+import pandas as pd
+
+report_df = pd.read_csv(
+    "../results/online_shoppers_model_classification_report.csv",
+    index_col=0
+)
+auc_df = pd.read_csv(
+    "../results/online_shoppers_model_auc.csv",
+    index_col=0
 )
 
-# Train a random forest classifier
-from sklearn.ensemble import RandomForestClassifier
+accuracy = report_df.loc["accuracy", "precision"]
+recall_1 = report_df.loc["1", "recall"]
+f1_1 = report_df.loc["1", "f1-score"]
+roc_auc = auc_df.loc["roc_auc", "value"]
 
-rf = RandomForestClassifier(
-    n_estimators=100,
-    random_state=42,
-    class_weight="balanced"  # VERY important
-)
-
-rf.fit(X_train, y_train)
-
-# Evaluate using f1 metrics and AUC
-from sklearn.metrics import classification_report, roc_auc_score
-
-y_pred = rf.predict(X_test)
-y_prob = rf.predict_proba(X_test)[:, 1]
-
-report = classification_report(y_test, y_pred, output_dict = True)
-recall_1 = report["1"]["recall"]
-f1_1 = report["1"]["f1-score"]
-
-accuracy = (y_pred == y_test).mean()
-roc_auc = roc_auc_score(y_test, y_prob)
 ```
 
 # Summary
@@ -170,16 +158,6 @@ info_df
 As shown in @tbl-df-info, the dataset contains 18 features with a mix of numerical and categorical types, and no missing values are present.
 
 ```{python, message=FALSE, warning=FALSE}
-# Convert boolean variables
-# Make a copy of the raw data to work with
-online=df.copy()
-online['Weekend'] = online['Weekend'].astype(int)
-online['Revenue'] = online['Revenue'].astype(int)
-# One-hot Encoding on categorical variables
-online = pd.get_dummies(online, columns=['Month', 'VisitorType'], drop_first=True)
-```
-
-```{python, message=FALSE, warning=FALSE}
 #| label: tbl-class-balance
 #| tbl-cap: "Class Balance for Target Variable Revenue"
 
@@ -195,16 +173,7 @@ of sessions not resulting in a purchase.
 
 ## EDA Figures
 
-```{python, message=FALSE, warning=FALSE}
-#| label: fig-value-and-counts
-#| fig-cap: "Histogram for All Feature Values and Counts"
-#| fig-width: 20
-#| fig-height: 18
-
-import matplotlib.pyplot as plt
-online.hist(figsize=(12, 10))
-plt.show()
-```
+![Histogram for all feature values and counts.](../results/online_shoppers_eda_histograms.png){#fig-value-and-counts fig-alt="Histograms showing the distributions of key online shopper features." width="100%"}
 
 As shown in @fig-value-and-counts show that most numerical variables (e.g., `Administrative`, `Informational`, `ProductRelated`) are highly
 right-skewed, with a large number of sessions having low values. This suggests that most users interact minimally with the
@@ -220,22 +189,14 @@ meaningfully identifies purchasing sessions.
 
 ```{python, messages=FALSE, warning=FALSE}
 #| label: tbl-f1-metrics-and-auc
-#| tbl-cap: "F1 Metrics and AUC"
+#| tbl-cap: "Classification metrics and AUC"
+#| echo: false
+#| warning: false
+#| message: false
 
-# Evaluate using f1 metrics and AUC
-from sklearn.metrics import classification_report, roc_auc_score
+import pandas as pd
 
-y_pred = rf.predict(X_test)
-y_prob = rf.predict_proba(X_test)[:, 1]
-
-report = classification_report(y_test, y_pred, output_dict = True)
-report_df = pd.DataFrame(report).transpose()
-recall_1 = report["1"]["recall"]
-f1_1 = report["1"]["f1-score"]
-
-accuracy = (y_pred == y_test).mean()
-roc_auc = roc_auc_score(y_test, y_prob)
-
+roc_auc = auc_df.loc["roc_auc", "value"]
 report_df
 ```
 The detailed classification metrics are shown in @tbl-f1-metrics-and-auc.
@@ -252,27 +213,12 @@ For class 1, the metrics are much lower. A recall of `{python} round(recall_1, 2
 correctly classified, which could be due to lack of actual buyer data in the dataset. The f1
 score of `{python} round(f1_1, 2)` is moderate, but not strong.
 
-To sum up, a ROC-AUC of `{python} round(roc_auc, 2)` means the model has high discriminative ability and can separate
+We also obtained an ROC-AUC of `{python} round(float(roc_auc), 3)`, meaning the model has high discriminative ability and can separate
 buyers and non-buyers well, but suffers from low recall for the buyer class.
 
 ## Feature Importance Plot
 
-```{python, message=FALSE, warning=FALSE}
-#| label: fig-top-10-features
-#| fig-cap: "Top 10 Important Features for Predicting Revenue"
-#| fig-width: 10
-#| fig-height: 12
-
-import matplotlib.pyplot as plt
-importances = pd.Series(
-    rf.feature_importances_,
-    index=X_train.columns
-).sort_values(ascending=False)
-importances.head(10).plot(kind="barh")
-plt.gca().invert_yaxis()
-plt.xlabel("Importance")
-plt.show()
-```
+![Top 10 important features for predicting revenue.](../results/online_shoppers_model_feature_importance.png){#fig-top-10-features fig-alt="Bar chart of the ten most important random forest features for predicting purchase revenue." width="100%"}
 
 @fig-top-10-features ranks variables based on how much they contribute to model decisions. 
 
@@ -290,50 +236,26 @@ Other features such as `TrafficType`, `Month_Nov`, and `Region` have a smaller i
 
 ## SHAP Summary Plot
 
-```{python, message=FALSE, warning=FALSE}
-#| label: fig-shap-plot
-#| fig-cap: SHAP Summary Plot for Purchase Prediction (Random Forest)
-#| fig-width: 18
-#| fig-height: 16
+![SHAP summary plot for purchase prediction from the random forest model.](../results/online_shoppers_model_shap_summary.png){#fig-shap-plot fig-alt="SHAP summary plot showing how feature values influence the model’s purchase predictions." width="100%"}
 
-import shap
-explainer = shap.TreeExplainer(rf)
-
-# Compute SHAP values
-shap_values = explainer.shap_values(X_test)
-
-# Handle binary-class output shape
-if isinstance(shap_values, list):
-    shap_values_class1 = shap_values[1]
-else:
-    shap_values_class1 = shap_values[:, :, 1]
-
-# Larger display, top 10 features only
-plt.figure(figsize=(14, 9))
-shap.summary_plot(
-    shap_values_class1,
-    X_test,
-    max_display=12,
-    plot_size=(14, 9)
-)
-plt.show()
-```
+The SHAP summary plot shows which features most strongly influence the model’s prediction of purchase behaviour. Features are ordered by importance, with each point representing one observation; the x-axis shows whether the feature pushes the prediction toward lower or higher purchase likelihood (positive, more likely), and the colour indicates whether the feature value is low or high.
 
 @fig-shap-plot above shows how feature values influence predictions: \
 
-1. High `PageValues` strongly push predictions towards purchase, and it indicates that users viewing high-value pages are very likely to convert \
+* High `PageValues` strongly push predictions towards purchase, and it indicates that users viewing high-value pages are very likely to convert.
+  
+* High `ExitRates` relate to negative SHAP values, indicating that when users frequently exit pages, the model predicts lower purchase probability.
 
-2. High `ExitRates` relate to negative SHAP values, indicating that when users frequently exit pages, the model predicts lower purchase probability. \
+* There is a seasonality effect for `Month_Nov`, where the month of November tends to push predictions towards purchase. This is likely due to Black Friday or holiday shopping behaviour, making customers more likely to purchase.
 
-3. There is a seasonality effect for `Month_Nov`, where the month of November tends to push predictions towards purchase. This is likely due to Black Friday or holiday shopping behaviour, making customers more likely to purchase. \
+* High `BouceRates` push predictions towards no purchase, indicating that users who leave quickly are less likely to buy.
 
-4. High `BouceRates` push predictions towards no purchase, indicating that users who leave quickly are unlikely to buy. \
+* `ProductRelated_Duration` appears to have some influence on predictions, but its effect is less clear and less consistently directional than top features such as PageValues and ExitRates
 
-5. `ProductRelated_Duration` shows that a longer time spend on product pages indicates a higher likelihood of purchasing. \
-
-6. `VisitorType_Returning_Visitor` shows that returning visitors are more likely to purchase and are more likely to convert than new visitors. \
+* `VisitorType_Returning_Visitor` shows that returning visitors are more likely to purchase than new visitors.
 
 From the results, we can see that engagement is the strongest predicture where features related to time spend and pages viewed dominate the model and are highly related to whether a customer purchases or not.
+
 
 # Discussion
 
@@ -341,7 +263,7 @@ From the results, we can see that engagement is the strongest predicture where f
 
 Overall, we found that browsing behaviour can be used to predict whether an online shopper
 will complete a purchase with reasonably strong performance. Our Random Forest classifier
-achieved an overall accuracy of `{python} round(float(accuracy), 2)` and a ROC-AUC of `{python} round(roc_auc, 2)`, which suggests that the model
+achieved an overall accuracy of `{python} round(float(accuracy), 2)` and a ROC-AUC of `{python} round(float(roc_auc), 3)`, which suggests that the model
 was good at distinguishing between purchasing and non-purchasing sessions. However, because
 the data was imbalanced, the more important result was the class-specific performance. The
 model performed very well at identifying non-purchasing sessions, but it was less effective
