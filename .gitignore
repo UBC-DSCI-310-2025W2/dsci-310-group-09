@@ -3,6 +3,7 @@
 .env
 env/
 data/*.csv
+!data/.gitkeep
 *.tmp
 tmp/
 
