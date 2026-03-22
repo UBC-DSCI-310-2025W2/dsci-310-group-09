@@ -51,3 +51,28 @@ docker run --rm -it \
 
 Go to `localhost:8888` to access jupyter lab, and open `analysis/310-group9_online-shoppers-classification.ipynb` for the full report.
 
+### Makefile Execution
+
+Ensure you are inside the project environment using either option A or option B above:
+- If using conda-lock: run `conda activate online-shoppers`
+- If using docker: The makefile is available inside the container's working directory.
+
+Once inside the project environment, run the following code to execute the entire analysis:
+
+```bash
+make all 
+```
+
+To execute specific steps in the pipeline, run the code below replacing "filename" with the actual filename on makefile:
+
+```bash
+make filename
+```
+
+To reset the analysis (remove all generated data files and results), run:
+
+```bash
+make clean
+```
+
+
