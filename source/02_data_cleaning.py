@@ -2,6 +2,9 @@ import os
 import click
 import pandas as pd
 
+from src.convert_boolean_values import convert_boolean_columns
+from src.calculate_class_balance import calculate_class_balance
+
 
 @click.command()
 @click.argument("input_path")
@@ -12,8 +15,7 @@ def main(input_path, output_path):
     online = df.copy()
 
     # Convert boolean columns to integers
-    online["Weekend"] = online["Weekend"].astype(int)
-    online["Revenue"] = online["Revenue"].astype(int)
+    online = convert_boolean_columns(online, ["Weekend", "Revenue"])
 
     # One-hot encode categorical variables
     online = pd.get_dummies(
@@ -32,26 +34,8 @@ def main(input_path, output_path):
     # Save processed data
     online.to_csv(output_path, index=False)
 
-    # Save class imbalance table to results/
-    class_balance = (
-        online["Revenue"]
-        .value_counts(normalize=True)
-        .sort_index()
-        .rename("proportion")
-        .reset_index()
-        .rename(columns={"index": "Revenue"})
-    )
-
-    class_counts = (
-        online["Revenue"]
-        .value_counts()
-        .sort_index()
-        .rename("count")
-        .reset_index(drop=True)
-    )
-
-    class_balance["count"] = class_counts
-
+    # Save class balance table to results/
+    class_balance = calculate_class_balance(online, "Revenue")
     class_balance_path = "results/online_shoppers_class_balance.csv"
     class_balance.to_csv(class_balance_path, index=False)
 
