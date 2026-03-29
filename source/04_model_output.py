@@ -9,6 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, roc_auc_score
 
 from src.evaluate_model import evaluate_model
+from src.create_feat_importance_plot import create_feat_importance_plot
 
 @click.command()
 @click.argument("input_path")
@@ -53,16 +54,10 @@ def main(input_path, output_prefix):
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
 
-    # Save feature importance plot
-    importances = pd.Series(
-        rf.feature_importances_,
-        index=X_train.columns
-    ).sort_values(ascending=False)
+    # Create feature importance plot
+    create_feat_importance_plot(rf, X_train, max_display=10)
 
-    plt.figure(figsize=(10, 6))
-    importances.head(10).plot(kind="barh")
-    plt.gca().invert_yaxis()
-    plt.xlabel("Importance")
+    # Save feature importance plot
     plt.tight_layout()
     plt.savefig(f"{output_prefix}_feature_importance.png", bbox_inches="tight")
     plt.close()
