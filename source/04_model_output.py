@@ -8,6 +8,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report, roc_auc_score
 
+from src.evaluate_model import evaluate_model
 
 @click.command()
 @click.argument("input_path")
@@ -32,27 +33,25 @@ def main(input_path, output_prefix):
     )
     rf.fit(X_train, y_train)
 
-    # Predictions
-    y_pred = rf.predict(X_test)
-    y_prob = rf.predict_proba(X_test)[:, 1]
+    # Predictions + evaluation using reusable function
+    results = evaluate_model(rf, X_test, y_test)
+
+    # Save classification report (remove roc_auc row)
+    report_df = results.drop(index="roc_auc")
+    report_df.to_csv(f"{output_prefix}_classification_report.csv", index=True)
+
+    # Save ROC-AUC separately
+    auc_value = results.loc["roc_auc", "roc_auc"]
+    auc_df = pd.DataFrame({
+    "metric": ["roc_auc"],
+    "value": [auc_value]
+})
+    auc_df.to_csv(f"{output_prefix}_auc.csv", index=False)
 
     # Make sure output folder exists
     output_dir = os.path.dirname(output_prefix)
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
-
-    # Save classification report table
-    report_df = pd.DataFrame(
-        classification_report(y_test, y_pred, output_dict=True)
-    ).transpose()
-    report_df.to_csv(f"{output_prefix}_classification_report.csv", index=True)
-
-    # Save ROC-AUC as a small table
-    auc_df = pd.DataFrame({
-        "metric": ["roc_auc"],
-        "value": [roc_auc_score(y_test, y_prob)]
-    })
-    auc_df.to_csv(f"{output_prefix}_auc.csv", index=False)
 
     # Save feature importance plot
     importances = pd.Series(
