@@ -29,6 +29,21 @@ def create_feat_importance_plot(model, X_train: pd.DataFrame, max_display: int) 
         If X_train is empty or has less than one column.
         If max_display is less than one.
         If max_display is greater than the number of features available.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> X_train = pd.DataFrame({
+    ...     "A": [1, 2, 3, 4],
+    ...     "B": [4, 3, 2, 1]
+    ... })
+    >>> y_train = [0, 1, 0, 1]
+    >>> model = RandomForestClassifier(random_state=123)
+    >>> model.fit(X_train, y_train)
+    RandomForestClassifier(...)
+    >>> create_feat_importance_plot(model, X_train, max_display=2)
+    <module 'matplotlib.pyplot' ...>
     """
     if hasattr(model, 'feature_importances_') == False:
         raise TypeError("Model must have the attribute feature_importances_")
