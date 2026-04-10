@@ -8,26 +8,37 @@ def evaluate_model(
     y_test: pd.Series
 ) -> pd.DataFrame:
     """
-    Evaluate a trained classification and return performance metrics.
+    Evaluate a trained classification and return detailed performance metrics.
 
     Parameters
     ----------
     model : object
-        A trained model with predict and predict_proba methods.
+        A trained model that implements both predict and predict_proba methods.
     X_test : pd.DataFrame
-        Test feature data.
+        Feature matrix for the test dataset.
     y_test : pd.Series
-        True labels for the test data.
+        True labels corresponding to X_test
 
     Returns
     ----------
     pd.DataFrame
-        DataFrame containing evaluation metrics.
-
+        A DataFrame containing classification performance metrics including the following columns:
+        
+        - precision: Proportion of positive predictions that are correct.
+        - recall: Proportion of actual positives correctly identified.
+        - f1_score: Mean of precision and recall.
+        - support: Number of true instances for each class.
+        - roc_auc: Area Under the ROC Curve, measuring ranking quality.
+        
+        The DataFrame includes rows for each class label, as well as summary rows such as accuracy, macro average, weighted average, and an additional roc_auc row.
+        
     Raises
     ----------
     TypeError
-        If inputs are not of expected types or model lacks required methods.
+        If:
+        - `model` does not implement `predict` and `predict_proba`, or
+        - `X_test` is not a pandas DataFrame, or
+        - `y_test` is not a pandas Series
     ValueError
         If X_test and y_test have mismatched lengths.
     """
