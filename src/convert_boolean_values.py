@@ -23,6 +23,19 @@ def convert_boolean_columns(df: pd.DataFrame, columns: list[str]) -> pd.DataFram
         If any specified columns are missing.
     ValueError
         If a specified column is not boolean dtype.
+    
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({
+    ...     "Weekend": [True, False, True],
+    ...     "Revenue": [False, True, False]
+    ... })
+    >>> convert_boolean_columns(df, ["Weekend", "Revenue"])
+       Weekend  Revenue
+    0        1        0
+    1        0        1
+    2        1        0
     """
     result = df.copy()
 

@@ -26,6 +26,15 @@ def calculate_class_balance(
         If df is not a pandas DataFrame or target_col is not a string.
     KeyError
         If target_col is not in the dataframe.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> df = pd.DataFrame({"Revenue": [0, 1, 1, 0, 1]})
+    >>> calculate_class_balance(df)
+       Revenue  proportion  count
+    0        0         0.4      2
+    1        1         0.6      3
     """
     if not isinstance(df, pd.DataFrame):
         raise TypeError("df must be a pandas DataFrame.")

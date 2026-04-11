@@ -41,6 +41,20 @@ def evaluate_model(
         - `y_test` is not a pandas Series
     ValueError
         If X_test and y_test have mismatched lengths.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from sklearn.ensemble import RandomForestClassifier
+    >>> X_train = pd.DataFrame({"A": [1, 2, 3, 4], "B": [4, 3, 2, 1]})
+    >>> y_train = pd.Series([0, 1, 0, 1])
+    >>> X_test = pd.DataFrame({"A": [1, 4], "B": [4, 1]})
+    >>> y_test = pd.Series([0, 1])
+    >>> model = RandomForestClassifier(random_state=123)
+    >>> model.fit(X_train, y_train)
+    RandomForestClassifier(...)
+    >>> evaluate_model(model, X_test, y_test)
+    ...
     """
 
     if not isinstance(X_test, pd.DataFrame):
