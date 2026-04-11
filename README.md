@@ -79,16 +79,6 @@ docker stop <container_id>
 
 Replace `<container_id>` with the value shown under the **CONTAINER ID** column
 
-### Quarto Report
-
-The final analysis report is written in Quarto.
-
-To open and render:
-
-```bash
-quarto render reports/online-shoppers-classification.qmd
-```
-
 ### Makefile Execution
 
 Ensure you are inside the project environment using either option A or option B above:
@@ -112,3 +102,31 @@ To reset the analysis (remove all generated data files and results), run:
 ```bash
 make clean
 ```
+
+### Quarto Report
+
+The final analysis report is written in Quarto.
+
+To open and render:
+
+```bash
+quarto render reports/online-shoppers-classification.qmd
+```
+
+### Accessing the Report
+
+The rendered report will be in `reports/online-shoppers-classification.html`
+For Mac from repo root, run in terminal:
+
+```bash
+open reports/online-shoppers-classification.html
+```
+
+For Windows run:
+
+```bash
+start reports/online-shoppers-classification.html
+```
+
+It would open the .html for you.
+

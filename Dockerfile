@@ -1,14 +1,43 @@
-# Pin the base image version (important for reproducibility)
-FROM quay.io/jupyter/scipy-notebook:2025-12-31
+FROM python:3.13-slim
 
-WORKDIR /home/jovyan/work
+WORKDIR /home/work
 
-# Copy the project files
-COPY --chown=${NB_UID}:${NB_GID} . /home/jovyan/work
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    ca-certificates \
+    make \
+    git \
+    libgl1 \
+    xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install extra packages not already in the base image
-RUN pip install --no-cache-dir shap==0.49.1
+RUN pip install --no-cache-dir \
+    pandas \
+    scikit-learn \
+    matplotlib \
+    shap==0.49.1 \
+    click \
+    requests \
+    jupyter \
+    pyyaml
 
-EXPOSE 8888
+ARG QUARTO_VERSION=1.9.37
+ARG TARGETARCH
 
-CMD ["start-notebook.sh", "--NotebookApp.token=", "--NotebookApp.password="]
+RUN if [ "$TARGETARCH" = "arm64" ]; then QUARTO_ARCH="linux-arm64"; \
+    elif [ "$TARGETARCH" = "amd64" ]; then QUARTO_ARCH="linux-amd64"; \
+    else echo "Unsupported architecture: $TARGETARCH" && exit 1; \
+    fi \
+    && wget -q "https://github.com/quarto-dev/quarto-cli/releases/download/v${QUARTO_VERSION}/quarto-${QUARTO_VERSION}-${QUARTO_ARCH}.tar.gz" \
+    && tar -xzf "quarto-${QUARTO_VERSION}-${QUARTO_ARCH}.tar.gz" \
+    && mv "quarto-${QUARTO_VERSION}" /opt/quarto \
+    && ln -s /opt/quarto/bin/quarto /usr/local/bin/quarto \
+    && rm "quarto-${QUARTO_VERSION}-${QUARTO_ARCH}.tar.gz" \
+    && quarto --version
+
+COPY . /home/work
+
+ENV PYTHONPATH=/home/work
+
+CMD ["bash"]
