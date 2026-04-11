@@ -7,7 +7,53 @@ Our findings showed that engagement related features were the most important pre
 
 This suggests e-commerce businesses should prioritize the user’s website engagement by capitalizing on high value pages and improving website design to maximize product related duration, which can reduce bounce rates and increase the likelihood of a purchase. For instance, offering exclusive deals or customized recommendations on high value pages. Additionally, configuring UX/UI interface to improve functionality and ease of use to keep users on the website. 
 
-## Reproducibility and Dependencies
+# Project Structure
+Below is the directory structure of the project, highlighting the distinction between `src/` and `source/`:
+
+```bash
+.
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── Dockerfile
+├── LICENSE
+├── README.md
+├── analysis
+│   └── 310-group9_online-shoppers-classification.ipynb
+├── conda-lock.yml
+├── data
+├── environment.yml
+├── makefile
+├── reports
+│   ├── citations.bib
+│   ├── online-shoppers-classification.html
+│   └── online-shoppers-classification.qmd
+│   
+├── results
+│   ├(include .png, .csv generated from makefile)
+├── source
+│   ├── 01_download_raw_data.py
+│   ├── 02_data_cleaning.py
+│   ├── 03_EDA_histogram.py
+│   └── 04_model_output.py
+├── src
+│   ├── __init__.py
+│   ├── calculate_class_balance.py
+│   ├── convert_boolean_values.py
+│   ├── create_feat_importance_plot.py
+│   └── evaluate_model.py
+└── tests
+    ├── test_calculate_class_balance.py
+    ├── test_convert_boolean_values.py
+    ├── test_create_feat_importance_plot.py
+    └── test_evaluate_model.py
+```
+
+## Key Distinction
+
+- `src/`: Contains reusable, modular functions used throughout the project (e.g., preprocessing, model training, evaluation logic)
+- `source/`: Contains scripts that call functions from `src/` to execute full pipeline steps (used by the Makefile).
+
+# Reproducibility and Dependencies
 
 - **Conda environment (locked):** `conda-lock.yml`  
 - **Container definition:** `Dockerfile`  
@@ -15,11 +61,11 @@ This suggests e-commerce businesses should prioritize the user’s website engag
 
 ---
 
-### Option A: Run with conda-lock (recommended for local development)
+## Option A: Run with conda-lock (recommended for local development)
 
 Install conda-lock and create the environment. Run the code below one line at a time.
 
-#### 1. Set up Environment
+### 1. Set up Environment
 
 ```bash
 conda install -c conda-forge conda-lock
@@ -27,17 +73,17 @@ conda-lock install -n online-shoppers conda-lock.yml
 conda activate online-shoppers
 ```
 
-### Option B: Run using Docker
+## Option B: Run using Docker
 
 The Docker image is defined in the root-level Dockerfile and is automatically built and pushed to Docker Hub through GitHub Actions whenever the Dockerfile or dependency files are updated on main.
 
-#### 1. Pull the Image
+### 1. Pull the Image
 
 ```bash
 docker pull cjz115/dsci-310-group-09:latest
 ```
 
-#### 2. Run the Container 
+### 2. Run the Container 
 
 ```bash
 docker run --rm -it \
@@ -47,39 +93,7 @@ docker run --rm -it \
   bash
 ```
 
-### Stopping the Docker Container
-
-When you are finished using the container, you can stop it in one of the following ways:
-
-#### 1. Stop directly in the terminal
-
-If the container is running in your current terminal, simply press:
-
-```bash
-CTRL + C
-```
-
-This will stop the container immediately.
-
-#### 2. Stop using Docker commands
-
-If the container is running in the background or another terminal
-
-1. Find the container ID
-
-```bash
-docker ps
-```
-
-2. Stop the container
-
-```bash
-docker stop <container_id>
-```
-
-Replace `<container_id>` with the value shown under the **CONTAINER ID** column
-
-### Makefile Execution
+### 3. Makefile Execution
 
 Ensure you are inside the project environment using either option A or option B above:
 - If using conda-lock: run `conda activate online-shoppers`
@@ -103,7 +117,7 @@ To reset the analysis (remove all generated data files and results), run:
 make clean
 ```
 
-### Quarto Report
+### 4. Quarto Report
 
 The final analysis report is written in Quarto.
 
@@ -113,7 +127,7 @@ To open and render:
 quarto render reports/online-shoppers-classification.qmd
 ```
 
-### Accessing the Report
+### 5. Accessing the Report
 
 The rendered report will be in `reports/online-shoppers-classification.html`
 For Mac from repo root, run in terminal:
@@ -130,3 +144,54 @@ start reports/online-shoppers-classification.html
 
 It would open the .html for you.
 
+
+# Notes on Container and Tests
+
+## Stopping the Docker Container
+
+When you are finished using the container, you can stop it in one of the following ways:
+
+### 1. Stop directly in the terminal
+
+If the container is running in your current terminal, simply press:
+
+```bash
+CTRL + C
+```
+
+This will stop the container immediately.
+
+### 2. Stop using Docker commands
+
+If the container is running in the background or another terminal
+
+1. Find the container ID
+
+```bash
+docker ps
+```
+
+2. Stop the container
+
+```bash
+docker stop <container_id>
+```
+
+Replace `<container_id>` with the value shown under the **CONTAINER ID** column
+
+## Running Tests
+Unit tests are located in the `tests/` directory and are designed to validate functions in `src/`.
+
+To run all tests:
+
+```bash
+pytest tests/
+```
+
+To run a specific test file:
+
+```bash
+pytest tests/test_evaluate_model.py
+```
+
+Make sure you are in the project environment (conda or Docker) before running tests.
