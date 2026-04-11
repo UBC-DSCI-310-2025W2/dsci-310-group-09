@@ -26,15 +26,10 @@ Below is the directory structure of the project, highlighting the distinction be
 ├── reports
 │   ├── citations.bib
 │   ├── online-shoppers-classification.html
-│   ├── online-shoppers-classification.qmd
-│   └── online-shoppers-classification_files
+│   └── online-shoppers-classification.qmd
+│   
 ├── results
-│   ├── online_shoppers_class_balance.csv
-│   ├── online_shoppers_eda_histograms.png
-│   ├── online_shoppers_model_auc.csv
-│   ├── online_shoppers_model_classification_report.csv
-│   ├── online_shoppers_model_feature_importance.png
-│   └── online_shoppers_model_shap_summary.png
+│   ├(include .png, .csv generated from makefile)
 ├── source
 │   ├── 01_download_raw_data.py
 │   ├── 02_data_cleaning.py
@@ -54,6 +49,7 @@ Below is the directory structure of the project, highlighting the distinction be
 ```
 
 ## Key Distinction
+
 - `src/`: Contains reusable, modular functions used throughout the project (e.g., preprocessing, model training, evaluation logic)
 - `source/`: Contains scripts that call functions from `src/` to execute full pipeline steps (used by the Makefile).
 
@@ -97,7 +93,61 @@ docker run --rm -it \
   bash
 ```
 
-# Stopping the Docker Container
+### 3. Makefile Execution
+
+Ensure you are inside the project environment using either option A or option B above:
+- If using conda-lock: run `conda activate online-shoppers`
+- If using docker: The makefile is available inside the container's working directory.
+
+Once inside the project environment, run the following code to execute the entire analysis:
+
+```bash
+make all 
+```
+
+To execute specific steps in the pipeline, run the code below replacing "filename" with the actual filename on makefile:
+
+```bash
+make filename
+```
+
+To reset the analysis (remove all generated data files and results), run:
+
+```bash
+make clean
+```
+
+### 4. Quarto Report
+
+The final analysis report is written in Quarto.
+
+To open and render:
+
+```bash
+quarto render reports/online-shoppers-classification.qmd
+```
+
+### 5. Accessing the Report
+
+The rendered report will be in `reports/online-shoppers-classification.html`
+For Mac from repo root, run in terminal:
+
+```bash
+open reports/online-shoppers-classification.html
+```
+
+For Windows run:
+
+```bash
+start reports/online-shoppers-classification.html
+```
+
+It would open the .html for you.
+
+
+# Notes on Container and Tests
+
+## Stopping the Docker Container
 
 When you are finished using the container, you can stop it in one of the following ways:
 
@@ -145,37 +195,3 @@ pytest tests/test_evaluate_model.py
 ```
 
 Make sure you are in the project environment (conda or Docker) before running tests.
-
-# Quarto Report
-
-The final analysis report is written in Quarto.
-
-To open and render:
-
-```bash
-quarto render reports/online-shoppers-classification.qmd
-```
-
-# Makefile Execution
-
-Ensure you are inside the project environment using either option A or option B above:
-- If using conda-lock: run `conda activate online-shoppers`
-- If using docker: The makefile is available inside the container's working directory.
-
-Once inside the project environment, run the following code to execute the entire analysis:
-
-```bash
-make all 
-```
-
-To execute specific steps in the pipeline, run the code below replacing "filename" with the actual filename on makefile:
-
-```bash
-make filename
-```
-
-To reset the analysis (remove all generated data files and results), run:
-
-```bash
-make clean
-```
