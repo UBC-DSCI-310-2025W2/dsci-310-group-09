@@ -179,7 +179,7 @@ docker stop <container_id>
 
 Replace `<container_id>` with the value shown under the **CONTAINER ID** column
 
-# Running Tests
+## Running Tests
 Unit tests are located in the `tests/` directory and are designed to validate functions in `src/`.
 
 To run all tests:
