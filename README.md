@@ -17,39 +17,77 @@ This suggests e-commerce businesses should prioritize the user’s website engag
 
 ### Option A: Run with conda-lock (recommended for local development)
 
-Install conda-lock, create environment and activate jupyter. Run the code below one line at a time.
+Install conda-lock and create the environment. Run the code below one line at a time.
+
+#### 1. Set up Environment
 
 ```bash
 conda install -c conda-forge conda-lock
 conda-lock install -n online-shoppers conda-lock.yml
 conda activate online-shoppers
-jupyter lab
 ```
-
-Open and run `analysis/310-group9_online-shoppers-classification.ipynb` for full report.
 
 ### Option B: Run using Docker
 
 The Docker image is defined in the root-level Dockerfile and is automatically built and pushed to Docker Hub through GitHub Actions whenever the Dockerfile or dependency files are updated on main.
 
-Pull the published image, run jupyter inside container:
+#### 1. Pull the Image
 
 ```bash
 docker pull cjz115/dsci-310-group-09:latest
 ```
 
-Run container and start jupyter lab,
+#### 2. Run the Container 
 
 ```bash
 docker run --rm -it \
-  -p 8888:8888 \
-  -v "$PWD":/home/jovyan/work \
-  -w /home/jovyan/work \
+  -v "$PWD":/home/work \
+  -w /home/work \
   cjz115/dsci-310-group-09:latest \
-  jupyter lab --ip=0.0.0.0 --NotebookApp.token='' --NotebookApp.password=''
-  ```
+  bash
+```
 
-Go to `localhost:8888` to access jupyter lab, and open `analysis/310-group9_online-shoppers-classification.ipynb` for the full report.
+### Stopping the Docker Container
+
+When you are finished using the container, you can stop it in one of the following ways:
+
+#### 1. Stop directly in the terminal
+
+If the container is running in your current terminal, simply press:
+
+```bash
+CTRL + C
+```
+
+This will stop the container immediately.
+
+#### 2. Stop using Docker commands
+
+If the container is running in the background or another terminal
+
+1. Find the container ID
+
+```bash
+docker ps
+```
+
+2. Stop the container
+
+```bash
+docker stop <container_id>
+```
+
+Replace `<container_id>` with the value shown under the **CONTAINER ID** column
+
+### Quarto Report
+
+The final analysis report is written in Quarto.
+
+To open and render:
+
+```bash
+quarto render reports/online-shoppers-classification.qmd
+```
 
 ### Makefile Execution
 
@@ -74,5 +112,3 @@ To reset the analysis (remove all generated data files and results), run:
 ```bash
 make clean
 ```
-
-
