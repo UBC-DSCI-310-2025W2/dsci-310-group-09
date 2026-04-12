@@ -65,23 +65,14 @@ Below is the directory structure of the project, highlighting the distinction be
 │   ├── 03_EDA_histogram.py
 │   └── 04_model_output.py
 ├── src
-│   ├── __init__.py
-│   ├── calculate_class_balance.py
-│   ├── convert_boolean_values.py
-│   ├── create_feat_importance_plot.py
-│   ├── data_validation.py
 │   └── evaluate_model.py
-└── tests
-    ├── test_calculate_class_balance.py
-    ├── test_convert_boolean_values.py
-    ├── test_create_feat_importance_plot.py
-    └── test_evaluate_model.py
+
 ```
 
 ## Key Distinction
 
-- `src/`: Contains reusable, modular functions used throughout the project (e.g., preprocessing, model training, evaluation logic)
-- `source/`: Contains scripts that call functions from `src/` to execute full pipeline steps (used by the Makefile).
+- `src/`: Contains reusable, modular functions used throughout the project (e.g., preprocessing, model training, evaluation logic). Now the .py are moved to seperate repo for packaging.
+- `source/`: Contains scripts that call functions from online-shoppers-tools package to execute full pipeline steps (used by the Makefile).
 
 # Reproducibility and Dependencies
 
