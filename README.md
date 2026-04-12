@@ -40,6 +40,7 @@ Below is the directory structure of the project, highlighting the distinction be
 │   ├── calculate_class_balance.py
 │   ├── convert_boolean_values.py
 │   ├── create_feat_importance_plot.py
+│   ├── data_validation.py
 │   └── evaluate_model.py
 └── tests
     ├── test_calculate_class_balance.py
@@ -144,8 +145,7 @@ start reports/online-shoppers-classification.html
 
 It would open the .html for you.
 
-
-# Notes on Container and Tests
+# More on Condainer, tests, and data validation
 
 ## Stopping the Docker Container
 
@@ -195,3 +195,22 @@ pytest tests/test_evaluate_model.py
 ```
 
 Make sure you are in the project environment (conda or Docker) before running tests.
+
+## Data validation
+
+The project uses `src/data_validation.py` to perform automated data quality checks throughout the analysis pipeline. These checks run inside `source/02_data_cleaning.py` and `source/04_model_output.py`, so users do not need to execute the validation module directly.
+
+The checks include validation of file format, expected columns, missingness, value ranges, category levels, boolean-like fields, class labels, and train/test split integrity. If any check fails, the pipeline stops and returns an informative error.
+
+To run the pipeline with validation:
+
+```bash
+make all
+```
+
+or ran individually:
+
+```bash
+PYTHONPATH=. python source/02_data_cleaning.py data/raw_online_shoppers.csv data/processed_online_shoppers.csv
+PYTHONPATH=. python source/04_model_output.py data/processed_online_shoppers.csv results/online_shoppers_model_feature_importance.png
+```
