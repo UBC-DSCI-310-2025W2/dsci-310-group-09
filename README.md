@@ -68,6 +68,7 @@ Below is the directory structure of the project, highlighting the distinction be
 │   ├── calculate_class_balance.py
 │   ├── convert_boolean_values.py
 │   ├── create_feat_importance_plot.py
+│   ├── data_validation.py
 │   └── evaluate_model.py
 └── tests
     ├── test_calculate_class_balance.py
@@ -173,8 +174,7 @@ start reports/online-shoppers-classification.html
 
 It would open the .html for you.
 
-
-# Notes on Container and Tests
+# More on Condainer, tests, and data validation
 
 ## Stopping the Docker Container
 
@@ -208,7 +208,7 @@ docker stop <container_id>
 
 Replace `<container_id>` with the value shown under the **CONTAINER ID** column
 
-# Running Tests
+## Running Tests
 
 Unit tests for the core utility functions are maintained in the [online-shoppers-tools](https://github.com/UBC-DSCI-310-2025W2/online-shoppers-tools/tree/main) repository. These tests validate key components of the analysis pipeline. Please refer to that repository for instructions on how to run the tests.
 
@@ -227,10 +227,30 @@ pytest tests/test_evaluate_model.py
 ```
 
 Make sure you are in the project environment (conda or Docker) before running tests.
+ 
+
+## Data validation
+
+The project uses `src/data_validation.py` to perform automated data quality checks throughout the analysis pipeline. These checks run inside `source/02_data_cleaning.py` and `source/04_model_output.py`, so users do not need to execute the validation module directly.
+
+The checks include validation of file format, expected columns, missingness, value ranges, category levels, boolean-like fields, class labels, and train/test split integrity. Most validation failures stop the pipeline and return an informative error. Duplicate observations are treated as a recoverable issue: they are flagged and removed during the cleaning step.
+
+To run the pipeline with validation:
+
+```bash
+make all
+```
+
+or ran individually:
+
+```bash
+PYTHONPATH=. python source/02_data_cleaning.py data/raw_online_shoppers.csv data/processed_online_shoppers.csv
+PYTHONPATH=. python source/04_model_output.py data/processed_online_shoppers.csv results/online_shoppers_model
+```
 
 # License
 The software code in this project is licensed under the **MIT License**. 
 
 The written analysis and reports in this project are included under the same repository and are also covered by the MIT License unless otherwise specified.
 
-See [LICENSE](./LICENSE) for full details. 
+See [LICENSE](./LICENSE) for full details.
