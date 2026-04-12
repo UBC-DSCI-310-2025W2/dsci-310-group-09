@@ -4,6 +4,7 @@ import pandas as pd
 
 from src.convert_boolean_values import convert_boolean_columns
 from src.calculate_class_balance import calculate_class_balance
+from src.data_validation import validate_raw_online_shoppers_data
 
 
 @click.command()
@@ -12,7 +13,22 @@ from src.calculate_class_balance import calculate_class_balance
 def main(input_path, output_path):
     df = pd.read_csv(input_path)
 
+    # Validate raw data before any transformations
+    validate_raw_online_shoppers_data(
+        df=df,
+        input_path=input_path,
+        missing_threshold=0.0,
+    )
+
     online = df.copy()
+    
+    # Remove duplicate observations after validation flags them
+    duplicate_count = online.duplicated().sum()
+    if duplicate_count > 0:
+        click.echo(
+            f"Validation warning: removing {duplicate_count} duplicate observations."
+        )
+        online = online.drop_duplicates().reset_index(drop=True)
 
     # Convert boolean columns to integers
     online = convert_boolean_columns(online, ["Weekend", "Revenue"])
