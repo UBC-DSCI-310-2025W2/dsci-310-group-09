@@ -34,6 +34,7 @@ Key dependencies include:
 | online-shoppers-tools | 0.1.0 | Package designed to support common tasks in data science workflows, such as cleaning and transforming data, converting boolean-like variables, analyzing class balances, generating feature importance plots, and evaluating classifications models with performance metrics |
 
 All dependencies are pinned in the [conda-lock.yml](./conda-lock.yml) file.
+The repo for function package is at : https://github.com/UBC-DSCI-310-2025W2/online-shoppers-tools
 
 # Project Structure
 Below is the directory structure of the project, highlighting the distinction between `src/` and `source/`:
