@@ -200,7 +200,7 @@ Make sure you are in the project environment (conda or Docker) before running te
 
 The project uses `src/data_validation.py` to perform automated data quality checks throughout the analysis pipeline. These checks run inside `source/02_data_cleaning.py` and `source/04_model_output.py`, so users do not need to execute the validation module directly.
 
-The checks include validation of file format, expected columns, missingness, value ranges, category levels, boolean-like fields, class labels, and train/test split integrity. If any check fails, the pipeline stops and returns an informative error.
+The checks include validation of file format, expected columns, missingness, value ranges, category levels, boolean-like fields, class labels, and train/test split integrity. Most validation failures stop the pipeline and return an informative error. Duplicate observations are treated as a recoverable issue: they are flagged and removed during the cleaning step.
 
 To run the pipeline with validation:
 
@@ -212,5 +212,5 @@ or ran individually:
 
 ```bash
 PYTHONPATH=. python source/02_data_cleaning.py data/raw_online_shoppers.csv data/processed_online_shoppers.csv
-PYTHONPATH=. python source/04_model_output.py data/processed_online_shoppers.csv results/online_shoppers_model_feature_importance.png
+PYTHONPATH=. python source/04_model_output.py data/processed_online_shoppers.csv results/online_shoppers_model
 ```
