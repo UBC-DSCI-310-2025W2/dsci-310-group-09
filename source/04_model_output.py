@@ -6,10 +6,14 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import classification_report, roc_auc_score
 
 from src.evaluate_model import evaluate_model
 from src.create_feat_importance_plot import create_feat_importance_plot
+from src.data_validation import (
+    validate_processed_online_shoppers_data,
+    validate_train_test_split,
+)
+
 
 @click.command()
 @click.argument("input_path")
@@ -17,14 +21,38 @@ from src.create_feat_importance_plot import create_feat_importance_plot
 def main(input_path, output_prefix):
     df = pd.read_csv(input_path)
 
+    # Validate processed modelling data
+    validate_processed_online_shoppers_data(df=df, input_path=input_path)
+
+    if "Revenue" not in df.columns:
+        raise ValueError("Processed data must contain a 'Revenue' column.")
+
     # Split predictors and target
     X = df.drop("Revenue", axis=1)
     y = df["Revenue"]
 
+    # Extra leakage guard
+    if "Revenue" in X.columns:
+        raise ValueError(
+            "Target leakage detected: 'Revenue' is still present in predictor data."
+        )
+
     # Train-test split
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y
+        X,
+        y,
+        test_size=0.2,
+        random_state=42,
+        stratify=y,
     )
+
+    # Validate split without using test information to shape training
+    validate_train_test_split(X_train, X_test, y_train, y_test)
+
+    # Make sure output folder exists before saving outputs
+    output_dir = os.path.dirname(output_prefix)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
 
     # Train model
     rf = RandomForestClassifier(
@@ -44,15 +72,10 @@ def main(input_path, output_prefix):
     # Save ROC-AUC separately
     auc_value = results.loc["roc_auc", "roc_auc"]
     auc_df = pd.DataFrame({
-    "metric": ["roc_auc"],
-    "value": [auc_value]
-})
+        "metric": ["roc_auc"],
+        "value": [auc_value]
+    })
     auc_df.to_csv(f"{output_prefix}_auc.csv", index=False)
-
-    # Make sure output folder exists
-    output_dir = os.path.dirname(output_prefix)
-    if output_dir:
-        os.makedirs(output_dir, exist_ok=True)
 
     # Create feature importance plot
     create_feat_importance_plot(rf, X_train, max_display=10)
