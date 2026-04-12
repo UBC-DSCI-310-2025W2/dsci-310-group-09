@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 
-from src.evaluate_model import evaluate_model
-from src.create_feat_importance_plot import create_feat_importance_plot
+from online_shoppers_tools.evaluate_model import evaluate_model
+from online_shoppers_tools.create_feat_importance_plot import create_feat_importance_plot
 from src.data_validation import (
     validate_processed_online_shoppers_data,
     validate_train_test_split,

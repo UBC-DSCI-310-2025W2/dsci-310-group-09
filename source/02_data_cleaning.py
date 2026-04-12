@@ -2,9 +2,9 @@ import os
 import click
 import pandas as pd
 
-from src.convert_boolean_values import convert_boolean_columns
-from src.calculate_class_balance import calculate_class_balance
-from src.data_validation import validate_raw_online_shoppers_data
+from online_shoppers_tools.convert_boolean_values import convert_boolean_columns
+from online_shoppers_tools.calculate_class_balance import calculate_class_balance
+from online_shoppers_tools.data_validation import validate_raw_online_shoppers_data
 
 
 @click.command()
