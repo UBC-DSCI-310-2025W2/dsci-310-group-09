@@ -14,9 +14,7 @@ bibliography: citations.bib
 ```{python, message=FALSE, warning=FALSE}
 import pandas as pd
 
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/00468/online_shoppers_intention.csv"
-df = pd.read_csv(url)
-df.to_csv("../data/raw_online_shoppers.csv", index=False)
+df = pd.read_csv("../data/raw_online_shoppers.csv")
 ```
 
 ```{python, message=FALSE, warning=FALSE}
