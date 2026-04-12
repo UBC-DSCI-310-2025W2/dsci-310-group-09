@@ -20,7 +20,8 @@ RUN pip install --no-cache-dir \
     click \
     requests \
     jupyter \
-    pyyaml
+    pyyaml\
+    git+https://github.com/UBC-DSCI-310-2025W2/online-shoppers-tools.git
 
 ARG QUARTO_VERSION=1.9.37
 ARG TARGETARCH
