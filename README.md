@@ -1,11 +1,39 @@
 # dsci-310-group-09 — Online Shoppers Purchase Behavior Classification
 
-This project builds classification models to predict whether an online shopping session results in a purchase, using the *Online Shoppers Purchasing Intention* dataset. We provide two fully reproducible ways to run the analysis: **conda-lock** (local environment) or **Docker** (containerized environment).
+# Introduction
+
+This project develops machine learning classification models to predict whether an online shopping session results in a purchase. The analysis is based on the _Online Shoppers Purchasing Intention Dataset_, which contains features describing user behaviour such as page activity, session duration, and traffic source.
+
+Predicting purchasing behavior is an important problem in e-commerce, as it enables businesses to better understand customer intent, improve conversion rates, and optimize website design. By leveraging user engagement metrics, this project aims to identify the most influential factors that drive purchase decisions.
+
+The project emphasizes reproducibility and modular design, providing two fully reproducible workflows using **conda-lock** (for local environments) and **Docker** (for containerized execution).
 
 # Findings
 Our findings showed that engagement related features were the most important predictors of online shopping behaviour. PageValue in particular, has the greatest influence on the model's performance followed by ExitRates, ProductRelated_Duration, ProductRelated, and BounceRates. According to the SHAP summary plot, high PageValue is associated with a positive SHAP value whereas high ExitRate is related to a negative SHAP value. This is not surprising as users who viewed high value pages are more likely to make a purchase compared to those who frequently exit pages. Longer viewing time of product related pages also indicate higher likelihood of purchase, in addition, users who leave the website quickly (High BounceRates) is related to lower purchase. The month of November is also found to positively relate with higher purchase, which is likely due to holiday shopping behaviour and sales occurring in this particular month. 
 
-This suggests e-commerce businesses should prioritize the user’s website engagement by capitalizing on high value pages and improving website design to maximize product related duration, which can reduce bounce rates and increase the likelihood of a purchase. For instance, offering exclusive deals or customized recommendations on high value pages. Additionally, configuring UX/UI interface to improve functionality and ease of use to keep users on the website. 
+This suggests e-commerce businesses should prioritize the user’s website engagement by capitalizing on high value pages and improving website design to maximize product related duration, which can reduce bounce rates and increase the likelihood of a purchase. For instance, offering exclusive deals or customized recommendations on high value pages. Additionally, configuring UX/UI interface to improve functionality and ease of use to keep users on the website.
+
+# Dependencies
+This project uses Python 3.10 with dependency management handled through a locked Conda environment (`conda-lock.yml`). All package versions are fully pinned to ensure reproducibility across different systems.
+
+Alternatively, the analysis can be executed within the provided Docker container, which automatically installs all required dependencies at the correct versions. This ensures a consistent and reproducible computing environment regardless of the host machine.
+
+Key dependencies include:
+
+| Package        | Version | Purpose |
+|----------------|--------|--------|
+| python | 3.10 | Core programming language used for the project |
+| numpy | 2.2.6 | Numerical computations and array operations |
+| pandas | 2.3.3 | Data loading, cleaning, and manipulation |
+| scikit-learn | 1.7.2 | Training classification models and evaluating performance |
+| matplotlib | 3.10.8 | Creating visualizations for exploratory data analysis and results |
+| shap | 0.49.1 | Interpreting model predictions using SHAP values |
+| pytest | 9.0.2 | Unit testing framework for validating functions in `src/` |
+| click | 8.3.1 | Command-line interface support for running scripts |
+| pip | 26.0.1 | Package manager used to install Python dependencies |
+| online-shoppers-tools | 0.1.0 | Package designed to support common tasks in data science workflows, such as cleaning and transforming data, converting boolean-like variables, analyzing class balances, generating feature importance plots, and evaluating classifications models with performance metrics |
+
+All dependencies are pinned in the [conda-lock.yml](./conda-lock.yml) file.
 
 # Project Structure
 Below is the directory structure of the project, highlighting the distinction between `src/` and `source/`:
@@ -131,6 +159,7 @@ quarto render reports/online-shoppers-classification.qmd
 ### 5. Accessing the Report
 
 The rendered report will be in `reports/online-shoppers-classification.html`
+
 For Mac from repo root, run in terminal:
 
 ```bash
@@ -153,10 +182,10 @@ When you are finished using the container, you can stop it in one of the followi
 
 ### 1. Stop directly in the terminal
 
-If the container is running in your current terminal, simply press:
+If the container is running in your current terminal, simply type:
 
 ```bash
-CTRL + C
+exit
 ```
 
 This will stop the container immediately.
@@ -180,7 +209,10 @@ docker stop <container_id>
 Replace `<container_id>` with the value shown under the **CONTAINER ID** column
 
 ## Running Tests
-Unit tests are located in the `tests/` directory and are designed to validate functions in `src/`.
+
+Unit tests for the core utility functions are maintained in the [online-shoppers-tools](https://github.com/UBC-DSCI-310-2025W2/online-shoppers-tools/tree/main) repository. These tests validate key components of the analysis pipeline. Please refer to that repository for instructions on how to run the tests.
+
+Unit tests are also located in the [tests](./tests) directory and are designed to validate functions in `src/`.
 
 To run all tests:
 
@@ -195,6 +227,7 @@ pytest tests/test_evaluate_model.py
 ```
 
 Make sure you are in the project environment (conda or Docker) before running tests.
+ 
 
 ## Data validation
 
@@ -214,3 +247,10 @@ or ran individually:
 PYTHONPATH=. python source/02_data_cleaning.py data/raw_online_shoppers.csv data/processed_online_shoppers.csv
 PYTHONPATH=. python source/04_model_output.py data/processed_online_shoppers.csv results/online_shoppers_model
 ```
+
+# License
+The software code in this project is licensed under the **MIT License**. 
+
+The written analysis and reports in this project are included under the same repository and are also covered by the MIT License unless otherwise specified.
+
+See [LICENSE](./LICENSE) for full details.
